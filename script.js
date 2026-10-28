@@ -111,3 +111,11 @@
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 })();
+(function(){
+ const floating=document.querySelector('.mobile-contact');
+ if(!floating)return;
+ let raf=0;
+ const update=()=>{floating.classList.toggle('is-compact',window.scrollY>260);raf=0;};
+ window.addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(update)},{passive:true});
+ update();
+})();

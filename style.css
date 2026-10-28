@@ -198,3 +198,43 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}img{displ
 }
 @media(max-width:380px){.service-grid,.workflow{grid-template-columns:1fr}.service-card{min-height:0}.hero h1{font-size:53px}.float-one{left:0}.float-two{right:0}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.ticker-track,.hero-product{animation:none!important}.js .reveal{opacity:1!important;transform:none!important;transition:none!important}.rail{scroll-behavior:auto}.btn,.service-card,.case-card,.project-photo img{transition:none!important}}
+/* Refinamento GELZ 2026-10-28 */
+.brand-icon{width:43px;height:43px;flex:0 0 43px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;background:#f1f2f5;border:1px solid #ffffff2d;border-radius:11px}
+.brand-icon img{display:block!important;width:43px!important;height:43px!important;min-width:43px;max-width:none;object-fit:cover;transform:scale(1.75)}
+.footer .brand-icon{width:38px;height:38px;flex-basis:38px}
+.footer .brand-icon img{width:38px!important;height:38px!important;min-width:38px}
+.video-frame{display:none}
+.video-poster{display:block;position:relative;width:100%;aspect-ratio:9/16;overflow:hidden;background:radial-gradient(circle at 50% 24%,#2b2b34,#0c0d11);isolation:isolate}
+.video-poster img{width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(.78) saturate(.95);transition:transform .4s,filter .4s}
+.video-poster::after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(to top,#030409ac,transparent);pointer-events:none;z-index:1}
+.video-poster:hover img{transform:scale(1.05);filter:brightness(.92)}
+.video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;display:grid;place-items:center;width:74px;height:74px;border:1px solid #ffffff70;border-radius:50%;background:#11151ccc;color:white;font-size:28px;box-shadow:0 0 60px #02040975}
+.video-label{position:absolute;bottom:22px;left:20px;right:20px;z-index:2;color:#fff;font-size:11px;font-weight:900;letter-spacing:.13em}
+.video-card{background:linear-gradient(145deg,#181b24,#0e1117);border-color:#e6eafa29}
+.shop-rail{gap:16px}
+.shop-card{flex:0 0 clamp(190px,22vw,245px);background:#14171d;border:1px solid #ffffff20;border-radius:21px;overflow:hidden;scroll-snap-align:start;transition:border-color .3s,transform .3s}
+.shop-card:hover{transform:translateY(-4px);border-color:#dfdafa60}
+.shop-photo{aspect-ratio:1;background-image:url('assets/elabella-vitrine.webp');background-repeat:no-repeat;background-size:200% 200%;background-color:#2c2025}
+.shop-photo-1{background-position:left top}
+.shop-photo-2{background-position:right top}
+.shop-photo-3{background-position:left bottom}
+.shop-photo-4{background-position:right bottom}
+.shop-info{padding:17px}
+.shop-kicker{display:block;color:#b8a4b7;letter-spacing:.14em;font-size:9px;font-weight:900;margin-bottom:10px}
+.shop-info h3{font:700 19px/1.2 "Space Grotesk",sans-serif;letter-spacing:-.045em;margin:0 0 8px}
+.shop-info p{color:#a3a9b7;font-size:11px;margin:0 0 14px}
+.shop-info strong{font:700 23px/1.3 "Space Grotesk",sans-serif;letter-spacing:-.05em;color:#f2d5e8}
+.minishop-section{background:radial-gradient(ellipse 40% 60% at 90% 0%,#e6a7d511,transparent),#0c0e12}
+.contact-buttons{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px}
+.contact-main{min-height:56px;font-size:14px!important;box-shadow:0 12px 40px #ead6f427}
+.contact-main:hover{box-shadow:0 17px 52px #ead6f44d}
+.contact-card{border-color:#cdd7ff36;background:radial-gradient(ellipse at 50% 0%,#b8acd733,transparent 58%),linear-gradient(160deg,#1e202b,#101319)}
+@media(max-width:680px){
+ .mobile-contact{left:auto!important;right:14px!important;bottom:16px!important;max-width:250px;min-width:52px;min-height:51px;padding:12px 17px!important;border-radius:999px!important;transition:max-width .25s,padding .25s,border-radius .25s,transform .25s}
+ .mobile-contact.is-compact{max-width:51px;width:51px;padding:12px!important;border-radius:50%!important}
+ .mobile-contact.is-compact .float-cta-text{display:none}
+ .float-cta-icon{font-size:21px;line-height:1}
+ .contact-buttons{flex-direction:column}.contact-buttons .btn{width:100%;white-space:normal}
+ .shop-card{flex-basis:clamp(185px,57vw,235px)}
+ .video-card{width:min(76vw,295px)}
+}
