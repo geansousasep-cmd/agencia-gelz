@@ -108,6 +108,45 @@
       rail.scrollBy({ left: direction * Math.max(210, rail.clientWidth * .75), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
     });
   });
+  // Player oficial: carrega somente ao entrar na área visível e pausa ao sair.
+  // Autoplay é uma tentativa (sem som) e pode ser bloqueado pelo navegador.
+  const players = [...document.querySelectorAll('.tiktok-player[data-video-id]')];
+  const playerOrigin = 'https://www.tiktok.com';
+  const playerMessage = (frame, type) => {
+    if (!frame.contentWindow) return;
+    frame.contentWindow.postMessage({type, 'x-tiktok-player': true}, playerOrigin);
+  };
+  const mountPlayer = (frame) => {
+    if (frame.src) return;
+    const id = frame.dataset.videoId;
+    if (!/^\\d{15,22}$/.test(id || '')) return;
+    const params = new URLSearchParams({autoplay:'1',muted:'1',loop:'1',controls:'1',rel:'0',music_info:'0',description:'0'});
+    frame.src = playerOrigin + '/player/v1/' + id + '?' + params.toString();
+    frame.dataset.mounted = 'true';
+  };
+  if ('IntersectionObserver' in window) {
+    const videoObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const frame = entry.target;
+        if (entry.isIntersecting && entry.intersectionRatio >= .42) {
+          mountPlayer(frame);
+          if (frame.dataset.ready === 'true') playerMessage(frame, 'play');
+        } else if (frame.dataset.mounted === 'true') {
+          playerMessage(frame, 'pause');
+        }
+      });
+    }, { threshold:[0,.42,.7], rootMargin:'80px 0px 0px 0px' });
+    players.forEach(p => videoObserver.observe(p));
+  } else {
+    players.forEach(mountPlayer);
+  }
+  window.addEventListener('message', event => {
+    if (event.origin !== playerOrigin || !event.data || event.data['x-tiktok-player'] !== true) return;
+    if (event.data.type !== 'onPlayerReady') return;
+    const target = players.find(p => p.contentWindow === event.source);
+    if (target) { target.dataset.ready = 'true'; }
+  });
+  
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 })();
