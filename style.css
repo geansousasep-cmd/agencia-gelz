@@ -238,3 +238,41 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}img{displ
  .shop-card{flex-basis:clamp(185px,57vw,235px)}
  .video-card{width:min(76vw,295px)}
 }
+
+/* GELZ 2026 — indicadores verificados, vitrine editorial e embeds inline */
+.proof-header{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:26px}
+.proof-header h2{font:700 clamp(33px,5vw,60px)/1.04 "Space Grotesk",sans-serif;letter-spacing:-.06em;margin:12px 0 0}
+.proof-header>p{max-width:365px;font-size:13px;color:#aeb5c2;line-height:1.7;margin:0}
+.proof .stat strong{font-size:clamp(25px,3vw,42px);overflow-wrap:anywhere}
+.proof-insights{margin-top:26px;border-radius:25px;border:1px solid rgba(231,237,255,.16);background:linear-gradient(140deg,rgba(30,35,46,.72),rgba(11,13,19,.94));padding:clamp(18px,3vw,30px)}
+.insight-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:21px}
+.insight-head h3{font:650 clamp(19px,2.8vw,28px)/1.2 "Space Grotesk",sans-serif;letter-spacing:-.045em;margin:9px 0 0}
+.insight-period{font-size:10px;letter-spacing:.08em;color:#a4abb8;white-space:nowrap}
+.insight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.insight-chart{border:1px solid rgba(255,255,255,.11);background:rgba(11,15,21,.64);border-radius:17px;padding:20px;display:grid;gap:16px}
+.chart-heading{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.chart-heading strong{font-size:13px;font-weight:750}
+.chart-heading small{font-size:10px;color:#919baa}
+.chart-item{display:grid;gap:7px}
+.chart-label{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:11px;color:#b4bdca}
+.chart-label b{color:#f6f8fc;font:700 15px "Space Grotesk",sans-serif}
+.chart-track{height:9px;background:#ffffff0e;overflow:hidden;border-radius:10px}
+.chart-track span{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#8f98b0,#e7eaf5);box-shadow:0 0 18px rgba(255,255,255,.09)}
+.chart-item:nth-of-type(3) .chart-track span{background:linear-gradient(90deg,#656b83,#b9bfce)}
+.proof-details{margin-top:16px;border-top:1px solid rgba(255,255,255,.1);padding-top:15px}
+.proof-details summary{display:flex;justify-content:space-between;gap:12px;cursor:pointer;color:#dfe3ed;font-weight:700;font-size:12px;list-style:none}
+.proof-details summary::-webkit-details-marker{display:none}
+.proof-details[open] summary span{transform:rotate(45deg)}
+.details-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-top:18px}
+.details-stats span{font-size:11px;color:#9da5b4;display:grid;gap:2px}
+.details-stats strong{font:700 20px "Space Grotesk",sans-serif;color:#f0f3f9}
+.shop-showcase-tag{display:inline-flex;font-size:10px;font-weight:850;letter-spacing:.1em;color:#ecdfec;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+.shop-info p{margin-bottom:11px}
+.video-card{overflow:hidden}
+.videos-section .video-frame{display:block;position:relative;width:100%;aspect-ratio:9/16;overflow:hidden;background:#080a0e}
+.videos-section .video-frame iframe{display:block;width:100%;height:100%;border:0;position:absolute;inset:0;background:#090a0e;z-index:2}
+.videos-section .video-placeholder{position:absolute;inset:0;display:grid;place-items:center}
+.videos-section .video-placeholder img{width:100%;height:100%;object-fit:cover;opacity:.68}
+.videos-section .video-placeholder .video-play{pointer-events:none}
+@media(max-width:900px){.proof-header{align-items:start;flex-direction:column;gap:12px}.insight-head{align-items:start;flex-direction:column}}
+@media(max-width:680px){.insight-grid{grid-template-columns:1fr}.insight-chart{padding:16px}.details-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.proof-insights{margin-top:16px;padding:16px}.proof-header h2{font-size:clamp(32px,9.5vw,45px)}.proof .stat strong{font-size:clamp(21px,5.4vw,33px)}.proof-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.video-card{width:min(78vw,295px)}}
