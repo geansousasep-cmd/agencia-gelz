@@ -56,47 +56,40 @@
     addEventListener('resize', () => { if (innerWidth > 680) closeMenu(); }, { passive: true });
   }
 
-  // A navegação por arraste funciona com mouse, touch e trackpad.
-  // No celular, preservamos o scroll nativo para evitar gestos travados.
+  // Desktop: arraste verdadeiro com captura de ponteiro, sem saltos.
+  // Mobile: preserve o gesto nativo de rolagem horizontal.
   document.querySelectorAll('.rail').forEach(rail => {
-    let dragging = false, moved = false, startX = 0, startScroll = 0;
+    let dragging = false, moved = false, suppressClick = false, pointerId = -1, startX = 0, startScroll = 0;
     rail.addEventListener('pointerdown', e => {
       if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('a,button,iframe')) return;
-      dragging = true;
-      moved = false;
-      startX = e.clientX;
-      startScroll = rail.scrollLeft;
+      dragging = true; moved = false; pointerId = e.pointerId;
+      startX = e.clientX; startScroll = rail.scrollLeft;
+      rail.classList.add('dragging');
+      rail.setPointerCapture?.(e.pointerId);
     });
     rail.addEventListener('pointermove', e => {
-      if (!dragging) return;
+      if (!dragging || e.pointerId !== pointerId) return;
       const delta = e.clientX - startX;
-      if (Math.abs(delta) > 5) moved = true;
-      if (moved) {
-        e.preventDefault();
-        rail.classList.add('dragging');
-        rail.scrollLeft = startScroll - delta;
-      }
+      if (Math.abs(delta) > 4) moved = true;
+      if (moved) { rail.scrollLeft = startScroll - delta; e.preventDefault(); }
     });
-    const stop = () => {
+    const stopDrag = e => {
       if (!dragging) return;
-      dragging = false;
+      if (e && e.pointerId !== pointerId) return;
+      dragging = false; pointerId = -1;
       rail.classList.remove('dragging');
-      if (moved) setTimeout(() => { moved = false; }, 0);
+      if (moved) { suppressClick = true; setTimeout(() => { suppressClick = false; moved = false; }, 110); }
     };
-    rail.addEventListener('pointerup', stop);
-    rail.addEventListener('pointercancel', stop);
-    rail.addEventListener('pointerleave', stop);
+    rail.addEventListener('pointerup', stopDrag);
+    rail.addEventListener('pointercancel', stopDrag);
+    rail.addEventListener('lostpointercapture', stopDrag);
     rail.addEventListener('click', e => {
-      if (moved) {
-        e.preventDefault();
-        e.stopPropagation();
-        moved = false;
-      }
+      if (suppressClick) { e.preventDefault(); e.stopPropagation(); suppressClick = false; }
     }, true);
     rail.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
         e.preventDefault();
-        rail.scrollBy({ left: (e.key === 'ArrowRight' ? 1 : -1) * rail.clientWidth * .7, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+        rail.scrollBy({ left: (e.key === 'ArrowRight' ? 1 : -1) * rail.clientWidth * .72, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
       }
     });
   });
@@ -106,6 +99,57 @@
       if (!rail) return;
       const direction = Number(button.dataset.direction) || 1;
       rail.scrollBy({ left: direction * Math.max(210, rail.clientWidth * .75), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    });
+  });
+  // KPIs: anima a contagem ao entrar na viewport, sem mudar o valor real.
+  const counters = [...document.querySelectorAll('[data-count][data-format]')];
+  const formatCounter = (value, fmt, final) => {
+    if (fmt === 'currency') {
+      return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2}).format(value);
+    }
+    if (fmt === 'millions') return (value/1000000).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' mi';
+    return Math.round(value).toLocaleString('pt-BR');
+  };
+  const runCounter = el => {
+    if (el.dataset.animated === 'true') return;
+    el.dataset.animated = 'true';
+    const target = Number(el.dataset.count);
+    if (!Number.isFinite(target)) return;
+    const fmt = el.dataset.format;
+    if (prefersReducedMotion) { el.textContent = formatCounter(target,fmt,true); return; }
+    const duration = 1450;
+    let start = null;
+    const tick = time => {
+      if (start === null) start = time;
+      const progress = Math.min((time-start)/duration,1);
+      const eased = 1 - Math.pow(1-progress,3);
+      el.textContent = formatCounter(target*eased,fmt,progress===1);
+      if (progress < 1) requestAnimationFrame(tick);
+      else el.textContent = formatCounter(target,fmt,true);
+    };
+    requestAnimationFrame(tick);
+  };
+  if ('IntersectionObserver' in window) {
+    const metricObserver = new IntersectionObserver((entries,obs) => {
+      entries.forEach(entry => {if(entry.isIntersecting){runCounter(entry.target);obs.unobserve(entry.target);}});
+    },{threshold:.35});
+    counters.forEach(el => metricObserver.observe(el));
+  } else counters.forEach(runCounter);
+  // Retém os players dentro do site sem travar o swipe do carrossel:
+  // controles são ativados somente quando o visitante pede.
+  document.querySelectorAll('.video-interact').forEach(button => {
+    button.addEventListener('click', () => {
+      const card = button.closest('.video-card');
+      const active = !card.classList.contains('is-interactive');
+      document.querySelectorAll('.video-card.is-interactive').forEach(other => {
+        if(other===card) return;
+        other.classList.remove('is-interactive');
+        const otherButton=other.querySelector('.video-interact');
+        if(otherButton) {otherButton.textContent='Ativar controles ↗';otherButton.setAttribute('aria-pressed','false');}
+      });
+      card.classList.toggle('is-interactive',active);
+      button.setAttribute('aria-pressed',String(active));
+      button.textContent=active?'Desativar controles ↔':'Ativar controles ↗';
     });
   });
   // Player oficial: carrega somente ao entrar na área visível e pausa ao sair.
