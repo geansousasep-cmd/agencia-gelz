@@ -344,3 +344,11 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}img{displ
 @media(max-width:680px){.proof{padding:48px 0}.proof-grid{gap:9px}.proof .stat{padding:15px 12px;min-height:151px}.proof .stat strong{font-size:clamp(23px,6.2vw,34px);overflow-wrap:anywhere}.proof .stat p{font-size:11px}.proof .stat small{font-size:9px}.proof .stat .overline{font-size:9px}.proof .stat-featured{border-color:#d6dff542}.proof-header{margin-bottom:18px}.shop-card{flex-basis:min(69vw,275px)}.video-card{flex-basis:min(75vw,295px)}.social-section{padding:45px 0}.social-board{padding:12px}.social-top{font-size:10px}.social-photos{gap:7px}.social-photos img{aspect-ratio:1.7}}
 @media(max-width:380px){.proof .stat strong{font-size:clamp(21px,6.5vw,29px)}}
 @media(prefers-reduced-motion:reduce){.chart-track span{transition:none!important;transform:none!important}.proof .stat,.social-board,.shop-photo img{transition:none!important}}
+
+/* Avaliações reais: não cortar fotos nem nomes e preservar legibilidade no mobile */
+.social-photos img{width:100%;height:auto;aspect-ratio:2.48;object-fit:contain;object-position:center;background:#1b1d26}
+.social-photos figure{background:#161922}
+.social-photos figcaption{font-size:11px}
+@media(max-width:680px){.social-photos{grid-template-columns:1fr;gap:12px}.social-photos img{aspect-ratio:2.48}.social-copy h2{font-size:clamp(32px,9vw,44px)}}
+/* Logomarca original transparente, em seu enquadramento completo */
+.brand-icon img,.footer .brand-icon img{object-fit:contain!important;transform:none!important;max-width:100%!important;background:transparent!important}
