@@ -41,7 +41,6 @@
     menu.classList.remove('open');
     menuButton.setAttribute('aria-expanded', 'false');
     menuButton.setAttribute('aria-label', 'Abrir menu');
-    menuButton.textContent = '☰';
   }
   if (menu && menuButton) {
     menuButton.addEventListener('click', () => {
@@ -49,11 +48,45 @@
       menu.classList.toggle('open', opening);
       menuButton.setAttribute('aria-expanded', String(opening));
       menuButton.setAttribute('aria-label', opening ? 'Fechar menu' : 'Abrir menu');
-      menuButton.textContent = opening ? '×' : '☰';
     });
     menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
     addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
     addEventListener('resize', () => { if (innerWidth > 680) closeMenu(); }, { passive: true });
+  }
+
+  // Miniportfólio automático, apenas capas reais das lojas.
+  const miniCarousel = document.querySelector('.hero-mini-carousel');
+  if (miniCarousel && !prefersReducedMotion) {
+    const frames = [...miniCarousel.querySelectorAll('img')];
+    let active = 0;
+    let intervalId = null;
+    let carouselVisible = false;
+    const cycle = () => {
+      if (frames.length < 2 || document.hidden || !carouselVisible) return;
+      frames[active].classList.remove('mini-active');
+      active = (active + 1) % frames.length;
+      frames[active].classList.add('mini-active');
+    };
+    const stop = () => {
+      if (intervalId !== null) clearInterval(intervalId);
+      intervalId = null;
+    };
+    const sync = () => {
+      stop();
+      if (carouselVisible && !document.hidden && frames.length > 1)
+        intervalId = setInterval(cycle, 3500);
+    };
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        carouselVisible = entries[0]?.isIntersecting ?? false;
+        sync();
+      }, {threshold:.05});
+      observer.observe(miniCarousel);
+    } else {
+      carouselVisible = true;
+      sync();
+    }
+    document.addEventListener('visibilitychange', sync);
   }
 
   // Desktop: arraste verdadeiro com captura de ponteiro, sem saltos.
