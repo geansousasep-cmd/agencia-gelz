@@ -119,7 +119,7 @@
   const mountPlayer = (frame) => {
     if (frame.src) return;
     const id = frame.dataset.videoId;
-    if (!/^\\d{15,22}$/.test(id || '')) return;
+    if (!/^[0-9]{15,22}$/.test(id || '')) return;
     const params = new URLSearchParams({autoplay:'1',muted:'1',loop:'1',controls:'1',rel:'0',music_info:'0',description:'0'});
     frame.src = playerOrigin + '/player/v1/' + id + '?' + params.toString();
     frame.dataset.mounted = 'true';
